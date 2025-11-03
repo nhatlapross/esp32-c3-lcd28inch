@@ -1,0 +1,24 @@
+✅ TOUCH IS NOW ENABLED! ✅
+
+Your board: ESP32-2424S012C (with capacitive touch)
+
+Touch Controller: CST816S
+I2C Address: 0x15
+
+Pin Configuration:
+- SDA: GPIO4
+- SCL: GPIO5
+- RST: GPIO1
+- IRQ: GPIO0
+
+What the test will do:
+1. Graphics test
+2. IMU test (touch top of screen to exit)
+3. TOUCH DRAWING TEST - Draw on the screen with your finger for 30 seconds!
+4. Shows "Touch Test Done!"
+
+Touch coordinates will be printed to Serial Monitor:
+"Touch: X=120, Y=80" etc.
+
+The code is now fully configured for your ESP32-2424S012C board!
+Just upload and enjoy! 🎉

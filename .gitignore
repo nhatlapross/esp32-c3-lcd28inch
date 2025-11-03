@@ -1,0 +1,12 @@
+.DS_Store
+node_modules/
+dist/
+.env
+.ref/
+.vscode/
+.idea/
+*.log
+
+# Build directories
+build/
+**/build/

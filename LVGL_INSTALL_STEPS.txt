@@ -1,0 +1,17 @@
+LVGL Installation - DO THIS FIRST
+
+Step 1: Install LVGL in Arduino IDE
+=====================================
+1. Open Arduino IDE
+2. Sketch → Include Library → Manage Libraries
+3. Search: "lvgl"
+4. Install: "lvgl by kisvegabor"
+5. Version: 8.3.11 (IMPORTANT: Use 8.x, not 9.x!)
+
+Step 2: After Installing
+=========================
+Come back here and tell me "done"
+
+Then I'll create the configuration files and demo project!
+
+DO THIS NOW, then continue! ⏰
