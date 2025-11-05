@@ -6,17 +6,59 @@
 #include "ui.h"
 
 lv_obj_t * ui_Screen1 = NULL;
-lv_obj_t * ui_Arc1 = NULL;
-lv_obj_t * ui_Label1 = NULL;
-lv_obj_t * ui_Label2 = NULL;
+lv_obj_t * ui_Image1 = NULL;
+lv_obj_t * ui_address = NULL;
+lv_obj_t * ui_balance = NULL;
+lv_obj_t * ui_Label3 = NULL;
+lv_obj_t * ui_Button1 = NULL;
+lv_obj_t * ui_Label4 = NULL;
+lv_obj_t * ui_Button2 = NULL;
+lv_obj_t * ui_Label5 = NULL;
+
+// Declare external functions
+extern void executeOfflineSign(void);
+extern void executeSignAndExecute(void);
+
 // event funtions
-void ui_event_Arc1(lv_event_t * e)
+void ui_event_Button1(lv_event_t * e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
-    lv_obj_t * target = lv_event_get_target(e);
 
-    if(event_code == LV_EVENT_VALUE_CHANGED) {
-        _ui_arc_set_text_value(ui_Label2, target, "", "");
+    if(event_code == LV_EVENT_CLICKED) {
+        // Execute offline signing
+        executeOfflineSign();
+    }
+}
+
+void ui_event_Button2(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        // Execute sign and execute transaction
+        executeSignAndExecute();
+    }
+}
+
+void ui_event_Screen1(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_RIGHT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_Screen2, LV_SCR_LOAD_ANIM_MOVE_RIGHT, 100, 0, &ui_Screen2_screen_init);
+    }
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_LEFT) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_Screen5, LV_SCR_LOAD_ANIM_MOVE_LEFT, 100, 0, &ui_Screen5_screen_init);
+    }
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_TOP) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_Screen3, LV_SCR_LOAD_ANIM_MOVE_TOP, 100, 0, &ui_Screen3_screen_init);
+    }
+    if(event_code == LV_EVENT_GESTURE &&  lv_indev_get_gesture_dir(lv_indev_get_act()) == LV_DIR_BOTTOM) {
+        lv_indev_wait_release(lv_indev_get_act());
+        _ui_screen_change(&ui_Screen4, LV_SCR_LOAD_ANIM_MOVE_BOTTOM, 100, 0, &ui_Screen4_screen_init);
     }
 }
 
@@ -27,32 +69,76 @@ void ui_Screen1_screen_init(void)
     ui_Screen1 = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_Screen1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_Arc1 = lv_arc_create(ui_Screen1);
-    lv_obj_set_width(ui_Arc1, 150);
-    lv_obj_set_height(ui_Arc1, 150);
-    lv_obj_set_x(ui_Arc1, -1);
-    lv_obj_set_y(ui_Arc1, 7);
-    lv_obj_set_align(ui_Arc1, LV_ALIGN_CENTER);
-    lv_arc_set_value(ui_Arc1, 50);
+    ui_Image1 = lv_img_create(ui_Screen1);
+    lv_img_set_src(ui_Image1, &ui_img_suiicon_png);
+    lv_obj_set_width(ui_Image1, LV_SIZE_CONTENT);   /// 50
+    lv_obj_set_height(ui_Image1, LV_SIZE_CONTENT);    /// 51
+    lv_obj_set_x(ui_Image1, -54);
+    lv_obj_set_y(ui_Image1, -46);
+    lv_obj_set_align(ui_Image1, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Image1, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_Image1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_Label1 = lv_label_create(ui_Screen1);
-    lv_obj_set_width(ui_Label1, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Label1, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Label1, 3);
-    lv_obj_set_y(ui_Label1, 69);
-    lv_obj_set_align(ui_Label1, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label1, "Volume");
+    ui_address = lv_label_create(ui_Screen1);
+    lv_obj_set_width(ui_address, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_address, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_address, 20);
+    lv_obj_set_y(ui_address, -60);
+    lv_obj_set_align(ui_address, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_address, "0x0");
 
-    ui_Label2 = lv_label_create(ui_Screen1);
-    lv_obj_set_width(ui_Label2, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Label2, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Label2, -1);
-    lv_obj_set_y(ui_Label2, 3);
-    lv_obj_set_align(ui_Label2, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label2, "50");
-    lv_obj_set_style_text_font(ui_Label2, &lv_font_montserrat_38, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_balance = lv_label_create(ui_Screen1);
+    lv_obj_set_width(ui_balance, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_balance, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_balance, 16);
+    lv_obj_set_y(ui_balance, -38);
+    lv_obj_set_align(ui_balance, LV_ALIGN_CENTER);
 
-    lv_obj_add_event_cb(ui_Arc1, ui_event_Arc1, LV_EVENT_ALL, NULL);
+    ui_Label3 = lv_label_create(ui_Screen1);
+    lv_obj_set_width(ui_Label3, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Label3, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Label3, 62);
+    lv_obj_set_y(ui_Label3, -39);
+    lv_obj_set_align(ui_Label3, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Label3, "SUI");
+
+    ui_Button1 = lv_btn_create(ui_Screen1);
+    lv_obj_set_width(ui_Button1, 107);
+    lv_obj_set_height(ui_Button1, 27);
+    lv_obj_set_x(ui_Button1, 9);
+    lv_obj_set_y(ui_Button1, 12);
+    lv_obj_set_align(ui_Button1, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Button1, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    lv_obj_clear_flag(ui_Button1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_Label4 = lv_label_create(ui_Screen1);
+    lv_obj_set_width(ui_Label4, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Label4, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Label4, 8);
+    lv_obj_set_y(ui_Label4, 12);
+    lv_obj_set_align(ui_Label4, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Label4, "Sign offline");
+
+    ui_Button2 = lv_btn_create(ui_Screen1);
+    lv_obj_set_width(ui_Button2, 110);
+    lv_obj_set_height(ui_Button2, 28);
+    lv_obj_set_x(ui_Button2, 8);
+    lv_obj_set_y(ui_Button2, 53);
+    lv_obj_set_align(ui_Button2, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_Button2, LV_OBJ_FLAG_SCROLL_ON_FOCUS);     /// Flags
+    lv_obj_clear_flag(ui_Button2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_Label5 = lv_label_create(ui_Screen1);
+    lv_obj_set_width(ui_Label5, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_Label5, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_Label5, 8);
+    lv_obj_set_y(ui_Label5, 53);
+    lv_obj_set_align(ui_Label5, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_Label5, "Sign execute");
+
+    lv_obj_add_event_cb(ui_Screen1, ui_event_Screen1, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Button1, ui_event_Button1, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_Button2, ui_event_Button2, LV_EVENT_ALL, NULL);
 
 }
 
@@ -62,8 +148,13 @@ void ui_Screen1_screen_destroy(void)
 
     // NULL screen variables
     ui_Screen1 = NULL;
-    ui_Arc1 = NULL;
-    ui_Label1 = NULL;
-    ui_Label2 = NULL;
+    ui_Image1 = NULL;
+    ui_address = NULL;
+    ui_balance = NULL;
+    ui_Label3 = NULL;
+    ui_Button1 = NULL;
+    ui_Label4 = NULL;
+    ui_Button2 = NULL;
+    ui_Label5 = NULL;
 
 }
