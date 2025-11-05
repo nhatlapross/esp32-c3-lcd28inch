@@ -5,6 +5,7 @@
 ### 1. Built-in TFT_eSPI Features
 
 #### ✅ Shapes (No external assets needed!)
+
 ```cpp
 // Primitives
 tft.drawPixel(x, y, color);
@@ -25,6 +26,7 @@ tft.drawEllipse(x, y, rx, ry, color);
 ```
 
 #### ✅ Text & Fonts
+
 ```cpp
 // Built-in fonts (already in library)
 tft.setTextFont(1);  // Font 1: 8x8 pixels
@@ -45,6 +47,7 @@ tft.loadFont("FontName");
 ```
 
 #### ✅ Colors (16-bit RGB565)
+
 ```cpp
 // Predefined colors
 TFT_BLACK, TFT_WHITE, TFT_RED, TFT_GREEN, TFT_BLUE
@@ -60,19 +63,23 @@ uint16_t color = tft.color565(r, g, b); // r,g,b = 0-255
 ### 2. Image Assets You Can Use
 
 #### ✅ Option A: Convert Images to C Arrays (Best for ESP32-C3)
+
 **Recommended:** Small icons, logos (< 10KB each)
 
 **Process:**
+
 1. Create image (PNG/JPG) → 240x240 or smaller
 2. Convert to RGB565 array using online tool or script
 3. Include in code as byte array
 
 **Tools:**
+
 - Image2cpp: http://javl.github.io/image2cpp/
 - LCD Image Converter (desktop app)
 - Python script with PIL
 
 **Example:**
+
 ```cpp
 // logo.h
 const uint16_t logoImage[] PROGMEM = {
@@ -84,14 +91,17 @@ tft.pushImage(x, y, width, height, logoImage);
 ```
 
 #### ✅ Option B: JPEG/PNG Images (with libraries)
+
 **Good for:** Photos, complex graphics
 
 **Requirements:**
+
 - JPEG: Use `TJpg_Decoder` library
 - PNG: Use `PNGdec` library
 - Store images in: SPIFFS, SD card, or LittleFS
 
 **Example:**
+
 ```cpp
 #include <TJpg_Decoder.h>
 
@@ -103,6 +113,7 @@ TJpgDec.drawFsJpg(x, y, "/logo.jpg");
 ```
 
 #### ✅ Option C: Sprite/Bitmap Files
+
 **Good for:** Animations, game graphics
 
 ```cpp
@@ -117,7 +128,9 @@ sprite.deleteSprite();
 ### 3. Icons & Symbols
 
 #### ✅ Unicode Characters (Built-in)
+
 Many fonts support Unicode:
+
 ```cpp
 tft.print("♥");  // Heart
 tft.print("⚡");  // Lightning
@@ -127,13 +140,17 @@ tft.print("✗");  // X mark
 ```
 
 #### ✅ Custom Icon Font (Recommended!)
+
 Create icon font from SVG icons:
+
 1. Use FontForge or online tools
 2. Convert SVG icons to font
 3. Load as custom font
 
 #### ✅ Simple Drawn Icons (Best!)
+
 Draw icons using shapes:
+
 ```cpp
 // Lock icon
 void drawLockIcon(int x, int y, uint16_t color) {
@@ -152,20 +169,23 @@ void drawWiFiIcon(int x, int y, uint16_t color) {
 ## 🎨 Design Constraints
 
 ### Display Specs:
+
 - **Resolution**: 240x240 pixels
 - **Shape**: Round (use circular layouts!)
 - **Color Depth**: 16-bit (65,536 colors)
 - **Memory**: ~115KB for full frame buffer
 
 ### Memory Guidelines:
-| Asset Type | Size | Recommendation |
-|------------|------|----------------|
-| Full screen image | 115KB | Use 1-2 max |
-| Small icon (32x32) | 2KB | Use many |
-| Font | 1-20KB | Use 2-3 fonts |
-| Sprites | Variable | Create/delete as needed |
+
+| Asset Type         | Size     | Recommendation          |
+| ------------------ | -------- | ----------------------- |
+| Full screen image  | 115KB    | Use 1-2 max             |
+| Small icon (32x32) | 2KB      | Use many                |
+| Font               | 1-20KB   | Use 2-3 fonts           |
+| Sprites            | Variable | Create/delete as needed |
 
 ### Performance Tips:
+
 - ✅ Use `fillScreen()` sparingly (slow)
 - ✅ Use sprites for animations
 - ✅ Draw only changed areas
@@ -174,23 +194,28 @@ void drawWiFiIcon(int x, int y, uint16_t color) {
 ## 🎯 Recommended UI Library Options
 
 ### Option 1: TFT_eSPI Only (What we're using now)
+
 **Pros:** Lightweight, direct control, fast
 **Cons:** More manual coding
 **Best for:** Simple UIs, custom designs
 
 ### Option 2: LVGL (Advanced GUI)
+
 **Pros:** Professional widgets, animations, themes
 **Cons:** Uses more memory (~200KB+)
 **Best for:** Complex apps with many screens
 
 **Setup:**
+
 ```cpp
 #include <lvgl.h>
 // See: https://github.com/lvgl/lvgl
 ```
 
 ### Option 3: TFT_eSPI_Widgets (Middle ground)
+
 Custom widgets built on TFT_eSPI:
+
 - Buttons
 - Sliders
 - Progress bars
@@ -201,11 +226,13 @@ Custom widgets built on TFT_eSPI:
 ### Recommended Asset Strategy:
 
 1. **Draw UI elements directly** (shapes, text)
+
    - Lock status indicator (circle + icon)
    - Time remaining (text + arc)
    - QR code (use QR library)
 
 2. **Small icons as C arrays** (< 5KB each)
+
    - Lock icon
    - WiFi icon
    - Battery icon
@@ -216,6 +243,7 @@ Custom widgets built on TFT_eSPI:
    - Saves memory for blockchain code
 
 ### Example Icon Sizes:
+
 ```
 16x16  = 512 bytes    ✅ Perfect for small icons
 32x32  = 2KB          ✅ Good for main icons
@@ -226,23 +254,27 @@ Custom widgets built on TFT_eSPI:
 ## 📦 Asset Sources
 
 ### Free Icon Libraries:
+
 - Material Icons: https://fonts.google.com/icons
 - Font Awesome: https://fontawesome.com/icons
 - Feather Icons: https://feathericons.com/
 - Bootstrap Icons: https://icons.getbootstrap.com/
 
 ### Image Conversion Tools:
+
 - Image2cpp: http://javl.github.io/image2cpp/
 - GIMP (export as C array)
 - Python PIL scripts
 
 ### QR Code Generation:
+
 - `qrcode` library for Arduino
 - Generate on ESP32, display on screen
 
 ## 💡 Quick Start
 
 Want me to create:
+
 1. **Simple card-based UI** (status cards, buttons)
 2. **Circular watch-style UI** (for round display)
 3. **SuiLock specific UI** (lock status, booking info)
